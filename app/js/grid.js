@@ -5,7 +5,7 @@ var grid = (function($) {
       itemsTotal = lanes * slotsInLane,
       itemPixelSize = 20,
       waypoints = new Array(lanes),
-      itemPositions = {
+      itemPositions = { // TODO keine doppelten Positionszuweisungen zulassen
         'Äpfel': getRandomPosition(),
         'Birnen': getRandomPosition(),
         'Salate': getRandomPosition(),
