@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script type="text/javascript" src="js/lib/jquery-3.0.0.min.js"></script>
+  <script type="text/javascript" src="js/grid.js"></script>
   <link rel="stylesheet" href="css/main.css">
   <title>Simulierung: Wegeoptimierung im Lager</title>
 </head>
 <body>
+
+<script>
+  $(document).ready(function() {
+    grid.init();
+  });
+</script>
+
 <div class="main-container">
   <div class="form-container">
     <form>
@@ -27,9 +36,7 @@
       </p>
     </form>
   </div>
-  <div class="simulation-container">
-    Ehm.. irgendetwas fehlt hier!
-  </div>
+  <div class="grid-container"></div>
 </div>
 </body>
 </html>
