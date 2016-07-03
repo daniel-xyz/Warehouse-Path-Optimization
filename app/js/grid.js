@@ -21,11 +21,13 @@ var grid = (function($) {
     for (var lane = 1; lane <= lanes; lane++) {
       for (var item = 1; item <= itemsOnLane; item++) {
 
+        var dynamicSelector = lane + "-" + item;
+
         // Waypoint
-        $('<div id=' + "waypoint-" + lane + item + '/>').css({
+        $('<div id=' + "waypoint-" + dynamicSelector + '/>').css({
           'position': 'absolute',
           'top': (item * itemPixelSize) + item * 3,
-          'margin-left': (3 * lane * itemPixelSize) - 2 * itemPixelSize + lane * 5,
+          'margin-left': (3 * lane * itemPixelSize) + (5 * lane) - (2 * itemPixelSize),
           'width': itemPixelSize,
           'height': itemPixelSize,
           'color': '#fff',
@@ -34,7 +36,7 @@ var grid = (function($) {
         }).appendTo('.grid-container');
 
         // left Item
-        $('<div id=' + "item-left-" + lane + item + '/>').css({
+        $('<div id=' + "item-left-" + dynamicSelector + '/>').css({
           'position': 'absolute',
           'top': 0,
           'right': itemPixelSize,
@@ -43,10 +45,10 @@ var grid = (function($) {
           'color': '#00BFFF',
           'border': '1px',
           'border-style': 'solid'
-        }).appendTo('#' + 'waypoint-' + lane + item);
+        }).appendTo('#' + 'waypoint-' + dynamicSelector);
 
         // Right Item
-        $('<div id=' + "item-right-" + lane + item + '/>').css({
+        $('<div id=' + "item-right-" + dynamicSelector + '/>').css({
           'position': 'absolute',
           'top': 0,
           'left': itemPixelSize,
@@ -55,7 +57,7 @@ var grid = (function($) {
           'color': '#00BFFF',
           'border': '1px',
           'border-style': 'solid'
-        }).appendTo('#' + 'waypoint-' + lane + item);
+        }).appendTo('#' + 'waypoint-' + dynamicSelector);
       }
     }
   }
