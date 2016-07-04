@@ -26,4 +26,8 @@ a {
 
 .grid-container {
   display: inline-block;
+
+}
+.job-container {
+  display: inline-block;
 }

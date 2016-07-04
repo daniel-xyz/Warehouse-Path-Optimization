@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <script type="text/javascript" src="js/lib/jquery-3.0.0.min.js"></script>
   <script type="text/javascript" src="js/grid.js"></script>
+  <script type="text/javascript" src="js/index.controller.js"> </script>
   <link rel="stylesheet" href="css/main.css">
   <title>Simulierung: Wegeoptimierung im Lager</title>
 </head>
@@ -19,7 +20,7 @@
   <div class="form-container">
     <form>
       <b>1. Auftragsdatei einlesen</b><br>
-      <input type="file" value="Auftragsdatei einlesen"/>
+      <input type="file" id="jobFileSelect" value="Auftragsdatei einlesen" onchange="indexController.readSingleFile(this)"/>
       <p>
         <b>2. Regel wählen</b><br>
         <input type="radio" name="rule" value="rule-1" checked> Regel 1 <br>
@@ -34,9 +35,15 @@
           <option value="20">20</option>
         </select> Stück
       </p>
+      <p>
+          <textarea id="job-container"></textarea><br>
+          <input type="button" value="Optimieren" onclick="indexController.optimizeJobs()"/><br>
+          <textarea id="job-optimized-container"></textarea>
+      </p>
     </form>
   </div>
   <div class="grid-container"></div>
 </div>
+
 </body>
 </html>
