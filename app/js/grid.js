@@ -5,16 +5,11 @@ var grid = (function($) {
       itemsTotal = lanes * slotsInLane,
       itemPixelSize = 20,
       waypoints = new Array(lanes),
-      itemPositions = { // TODO keine doppelten Positionszuweisungen zulassen
-        'Äpfel': getRandomPosition(),
-        'Birnen': getRandomPosition(),
-        'Salate': getRandomPosition(),
-        'Bananen': getRandomPosition(),
-        'Melonen': getRandomPosition()
-      };
+      itemPositions = ['Äpfel', 'Birnen', 'Salate', 'Bananen', 'Melonen'];
 
   this.init = function() {
     generateWaypoints();
+    setItemPositions();
     renderGrid();
   };
 
@@ -24,6 +19,14 @@ var grid = (function($) {
 
       for (var slot = 1; slot <= slotsInLane; slot++) {
         waypoints[lane][slot] = slot;
+      }
+    }
+  }
+
+  function setItemPositions() {
+    for(var item in itemPositions) {
+      if (itemPositions.hasOwnProperty(item)) {
+        itemPositions[item] = getRandomPosition();
       }
     }
   }
