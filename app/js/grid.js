@@ -27,10 +27,6 @@ Grid.prototype.getSlotNr = function(lane, slotPositionInLane) {
   return ((lane  - 1) * this.slotsInLane) + slotPositionInLane;
 };
 
-Grid.prototype.getWaypointNr = function(lane, slotPositionInLane) {
-  return Math.ceil(grid.getSlotNr(lane, slotPositionInLane) / 2);
-};
-
 Grid.prototype.getWaypointNr = function(slotNr) {
   return Math.ceil(slotNr / 2);
 };
@@ -45,8 +41,8 @@ Grid.prototype.render = function() {
       for (var slot = 1; slot <= grid.getSlotsInLane(); slot++) {
 
         var size = grid.getSlotPixelSize();
-        var waypointNr = grid.getWaypointNr(lane, slot);
         var slotNr = grid.getSlotNr(lane, slot);
+        var waypointNr = grid.getWaypointNr(slotNr);
 
         if (slot % 2 != 0) {
           // Waypoint
