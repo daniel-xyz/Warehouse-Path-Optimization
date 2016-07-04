@@ -20,6 +20,22 @@ class IndexController {
 
   }
 
+  generateJobs() {
+    var generatedData = "name,item1,item2,item3,item4,item5,item6\n";
+    for(var i=1;i<=10;i++){
+      var items = Math.round(Math.random() * 3) + 3;
+
+      generatedData += "customer"+i+",";
+
+      for(var j = 0; j<items;j++){
+        generatedData += Math.round(Math.random()*63) + ',';
+      }
+      generatedData = generatedData.substring(0,generatedData.length-1) + "\n";
+    }
+    generatedData = generatedData.substring(0,generatedData.length-1);
+    document.getElementById('job-container').value = generatedData;
+  }
+
   optimizeJobs() {
     var jobObj = this.processData(document.getElementById('job-container').value);
     console.log(jobObj);
