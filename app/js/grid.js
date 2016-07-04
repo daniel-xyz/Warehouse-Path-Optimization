@@ -23,16 +23,16 @@ Grid.prototype.getSlotPixelSize = function() {
   return this.slotPixelSize;
 };
 
-Grid.prototype.getSlotNr = function(lane, slot) {
-  return ((lane  - 1) * this.slotsInLane) + slot;
+Grid.prototype.getSlotNr = function(lane, slotPositionInLane) {
+  return ((lane  - 1) * this.slotsInLane) + slotPositionInLane;
 };
 
-Grid.prototype.getWaypointNr = function(lane, slot) {
-  return Math.ceil(grid.getSlotNr(lane, slot) / 2);
+Grid.prototype.getWaypointNr = function(lane, slotPositionInLane) {
+  return Math.ceil(grid.getSlotNr(lane, slotPositionInLane) / 2);
 };
 
-Grid.prototype.getLaneNr = function(slotNr) {
-  return Math.ceil(slotNr / this.slotsInLane);
+Grid.prototype.getWaypointNr = function(slotNr) {
+  return Math.ceil(slotNr / 2);
 };
 
 Grid.prototype.render = function() {
