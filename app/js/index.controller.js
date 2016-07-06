@@ -38,29 +38,36 @@ class IndexController {
 
   optimizeJobs() {
     var jobObj = this.processData(document.getElementById('job-container').value);
-    var slotsInLane = 12;//grid.getSlotsInLane();
+    var slotsInLane = 8;//grid.getSlotsInLane();
 
-    var costTraversing = 0.5;
-    var costPerLane = 1.0;
-    var currentLane = 0;
+    var costTraversing = 0.1;
+    var costPerLane = 1;
+
     //for(var singleJobObj of jobObj) {
 
     for(var i=1; i<=Object.keys(jobObj).length;i++) {
       var singleJobObj = jobObj[i];
+      var currentLane = 0;
+      var distance = 0;
 
-        var distance = 0;
-        for(var j=0;j<singleJobObj.items.length;j++) {
-          var singleItem = singleJobObj.items[j];
-
-          var goToLane = singleItem % slotsInLane;
-          distance += (goToLane-currentLane)*costTraversing;
-          if(goToLane != currentLane){
-            distance += costPerLane;
-          }
-          currentLane = goToLane;
-          jobObj[i].jobDistance = distance;
-          // have to add driving back to source
+      for(var j=0;j<singleJobObj.items.length;j++) {
+        var singleItem = singleJobObj.items[j];
+        var goToLane = Math.floor(singleItem / slotsInLane)+1;
+        console.log('im in lane:'+currentLane);
+        console.log('iwant to go to lane:'+goToLane);
+        console.log('Traversing costs:'+(goToLane-currentLane)*costTraversing);
+        distance += (goToLane-currentLane)*costTraversing;
+        if(goToLane != currentLane){
+          console.log('Entering new Lane costs:' + costPerLane);
+          distance += costPerLane;
+        }
+        currentLane = goToLane;
+        jobObj[i].jobDistance = distance;
+        console.log(jobObj[i].jobDistance);
       }
+      console.log('lastLane:'+ currentLane + ' cost: ' + currentLane*costTraversing);
+      jobObj[i].jobDistance += currentLane * costTraversing;
+      jobObj[i].jobDistance = (jobObj[i].jobDistance).toFixed(1);
     }
 
     console.log(jobObj);
