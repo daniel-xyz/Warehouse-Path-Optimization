@@ -16,9 +16,10 @@ h1 {
 #robot {
   background: url("../img/wall-e.png") no-repeat;
   background-size: contain;
-  width: 42px;
-  height: 42px;
+  width: 70px;
+  height: 70px;
   display: none;
+  z-index: 1;
 }
 
 .main-container {

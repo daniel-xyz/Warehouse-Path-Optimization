@@ -53,6 +53,7 @@ Grid.prototype.render = function() {
             'left': (3 * lane * size) + (5 * lane) - (2 * size),
             'width': size,
             'height': size,
+            'z-index': -1
           }).appendTo('.grid-container');
 
           // Left Slot
@@ -64,7 +65,8 @@ Grid.prototype.render = function() {
             'height': size,
             'color': '#00BFFF',
             'border': '1px',
-            'border-style': 'solid'
+            'border-style': 'solid',
+            'z-index': -1
           }).appendTo('#waypoint-' + waypointNr);
         } else {
           // Right Slot
@@ -76,7 +78,8 @@ Grid.prototype.render = function() {
             'height': size,
             'color': '#00BFFF',
             'border': '1px',
-            'border-style': 'solid'
+            'border-style': 'solid',
+            'z-index': -1
           }).appendTo('#waypoint-' + waypointNr);
         }
       }

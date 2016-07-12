@@ -23,7 +23,7 @@ $(document).ready(function() {
   };
 
   var moveToWaypoint = function(waypointNr, callback) {
-    var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 5;
+    var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35;
     var rowOffsetBottom = $('#waypoint-' + (grid.getSlotsInLane()/2)).offset().top + slotSize + 5;
     var $waypoint = $('#waypoint-' + waypointNr);
     var wpOffsetLeft = $waypoint.offset().left;
@@ -61,7 +61,7 @@ $(document).ready(function() {
           moveUpBy(robotOffsetTop - rowOffsetTop);
           movedToOffsetRow = true;
         } else {
-          moveRightBy(wpOffsetLeft - robotOffsetLeft + 5);
+          moveRightBy(wpOffsetLeft - robotOffsetLeft);
           movedToLane = true;
         }
       }
