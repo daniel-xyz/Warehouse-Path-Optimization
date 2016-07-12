@@ -92,8 +92,14 @@ $(document).ready(function() {
     if (waypoint !== undefined) {
       moveToWaypoint(waypoint, robotTest);
     } else {
-      window.alert("Fertig");
+      celebrate();
     }
+  }
+
+  function celebrate() {
+    move(robot)
+      .rotate(720)
+      .end();
   }
 
   window.setTimeout(function() {
