@@ -8,6 +8,10 @@ $(document).ready(function() {
       currentDirection = "up",
       testWaypoints = [73, 65, 20, 19, 3, 10];
 
+  move.defaults = {
+    duration: 800
+  };
+
   var initPosition = function() {
     var $lastWaypointInFirstLane = $('#waypoint-' + (grid.getSlotsInLane()/2));
 
