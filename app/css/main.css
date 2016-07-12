@@ -11,6 +11,7 @@ a {
 
 h1 {
   line-height: normal;
+  z-index: -1;
 }
 
 #robot {

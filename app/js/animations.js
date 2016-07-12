@@ -26,7 +26,7 @@ $(document).ready(function() {
     var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35;
     var rowOffsetBottom = $('#waypoint-' + (grid.getSlotsInLane()/2)).offset().top + slotSize + 5;
     var $waypoint = $('#waypoint-' + waypointNr);
-    var wpOffsetLeft = $waypoint.offset().left;
+    var wpOffsetLeft = $waypoint.offset().left - 5;
     var wpOffsetTop = $waypoint.offset().top;
     var movedToLane = false;
     var movedToSlot = false;
