@@ -108,4 +108,3 @@ Grid.prototype.render = function() {
     }
   }
 };
-

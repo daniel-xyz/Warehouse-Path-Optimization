@@ -9,6 +9,10 @@ a {
   color: #1E90FF;
 }
 
+h1 {
+  line-height: normal;
+}
+
 .main-container {
   margin: 20px;
   text-align: left;

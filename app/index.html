@@ -9,7 +9,6 @@
   <title>Simulierung: Wegeoptimierung im Lager</title>
 </head>
 <body>
-
 <script>
   $(document).ready(function() {
     grid.render();
@@ -36,15 +35,14 @@
         </select> Stück
       </p>
       <p>
-          <textarea id="job-container"></textarea><br>
-          <input type="button" value="Generieren" onclick="indexController.generateJobs()"/><br>
-          <input type="button" value="Optimieren" onclick="indexController.optimizeJobs()"/><br>
-          <textarea id="job-optimized-container"></textarea>
+        <textarea id="job-container"></textarea><br>
+        <input type="button" value="Generieren" onclick="indexController.generateJobs()"/><br>
+        <input type="button" value="Optimieren" onclick="indexController.optimizeJobs()"/><br>
+        <textarea id="job-optimized-container"></textarea>
       </p>
     </form>
   </div>
     <div class="grid-container"></div>
 </div>
-
 </body>
 </html>
