@@ -9,7 +9,6 @@ function Grid(lanes, slotsInLane, slotSize) {
   this.lanes = lanes;
   this.slotsInLane = slotsInLane;
   this.slotPixelSize = slotSize;
-  this.startingPoint = $('#waypoint-' + (slotsInLane - 1)).position;
 }
 
 Grid.prototype.getLanes = function() {
@@ -22,10 +21,6 @@ Grid.prototype.getSlotsInLane = function() {
 
 Grid.prototype.getSlotPixelSize = function() {
   return this.slotPixelSize;
-};
-
-Grid.prototype.getStartingPoint = function() {
-  return this.startingPoint;
 };
 
 Grid.prototype.getSlotNr = function(lane, slotPositionInLane) {
@@ -42,10 +37,11 @@ Grid.prototype.render = function() {
   renderItems();
 
   function renderGrid() {
+    var size = grid.getSlotPixelSize();
+
     for (var lane = 1; lane <= grid.getLanes(); lane++) {
       for (var slot = 1; slot <= grid.getSlotsInLane(); slot++) {
 
-        var size = grid.getSlotPixelSize();
         var slotNr = grid.getSlotNr(lane, slot);
         var waypointNr = grid.getWaypointNr(slotNr);
 
@@ -57,9 +53,6 @@ Grid.prototype.render = function() {
             'left': (3 * lane * size) + (5 * lane) - (2 * size),
             'width': size,
             'height': size,
-            'color': '#fff',
-            'border': '1px',
-            'border-style': 'solid'
           }).appendTo('.grid-container');
 
           // Left Slot
