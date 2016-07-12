@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <script type="text/javascript" src="js/lib/jquery-3.0.0.min.js"></script>
+  <script type="text/javascript" defer src="js/lib/move.min.js"></script>
   <script type="text/javascript" src="js/grid.js"></script>
+  <script type="text/javascript" src="js/animations.js"></script>
   <script type="text/javascript" src="js/index.controller.js"> </script>
   <link rel="stylesheet" href="css/main.css">
   <title>Simulierung: Wegeoptimierung im Lager</title>
@@ -14,6 +16,8 @@
     grid.render();
   });
 </script>
+
+
 <div class="main-container">
   <a><h1>Kommissionierung: Wegoptimierung am Beispiel eines Regallagers</h1></a>
   <div class="form-container">
@@ -42,7 +46,28 @@
       </p>
     </form>
   </div>
-    <div class="grid-container"></div>
+  <div class="grid-container">
+    <div id="robot"></div>
+  </div>
+  <div class="summary-container">
+    <table>
+      <tr>
+        <td>Durchgang</td>
+        <td>Aufträge</td>
+        <td>Weg</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>1,3</td>
+        <td>210m</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>2,4</td>
+        <td>200m</td>
+      </tr>
+    </table>
+  </div>
 </div>
 </body>
 </html>

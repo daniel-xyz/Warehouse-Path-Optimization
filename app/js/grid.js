@@ -1,14 +1,15 @@
-var grid = new Grid(7, 24),
+var grid = new Grid(8, 24, 40),
     testJobs = {
       1: [19, 38 , 5],
       2: [130, 60, 40],
       3: [94, 49, 146]
     };
 
-function Grid(lanes, slotsInLane) {
+function Grid(lanes, slotsInLane, slotSize) {
   this.lanes = lanes;
   this.slotsInLane = slotsInLane;
-  this.slotPixelSize = 20;
+  this.slotPixelSize = slotSize;
+  this.startingPoint = $('#waypoint-' + (slotsInLane - 1)).position;
 }
 
 Grid.prototype.getLanes = function() {
@@ -21,6 +22,10 @@ Grid.prototype.getSlotsInLane = function() {
 
 Grid.prototype.getSlotPixelSize = function() {
   return this.slotPixelSize;
+};
+
+Grid.prototype.getStartingPoint = function() {
+  return this.startingPoint;
 };
 
 Grid.prototype.getSlotNr = function(lane, slotPositionInLane) {
@@ -49,7 +54,7 @@ Grid.prototype.render = function() {
           $('<div id=' + "waypoint-" + waypointNr + '/>').css({
             'position': 'absolute',
             'top': (slot / 2 * size) + slot * 2,
-            'margin-left': (3 * lane * size) + (5 * lane) - (2 * size),
+            'left': (3 * lane * size) + (5 * lane) - (2 * size),
             'width': size,
             'height': size,
             'color': '#fff',
