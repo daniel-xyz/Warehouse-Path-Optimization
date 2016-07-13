@@ -29,17 +29,19 @@
       </p>
       <p>
         <b>3. Anzahl der Behälter</b><br>
-        <select name="quantity">
+        <select id="jobsPerGroup" name="quantity">
           <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
           <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
+          <option value="6">6</option>
         </select> Stück
       </p>
       <p>
         <textarea id="job-container"></textarea><br>
         <input type="button" value="Generieren" onclick="indexController.generateJobs()"/><br>
-        <input type="button" value="Optimieren" onclick="indexController.optimizeJobs()"/><br>
+        <input type="button" value="Optimieren" onclick="indexController.calculateJobDistance()"/><br>
         <textarea id="job-optimized-container"></textarea>
       </p>
     </form>

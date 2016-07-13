@@ -49,25 +49,73 @@ class IndexController {
     }
 
     this.groupJobs();
-    
+
     console.log(this.jobObj);
-    console.log(this.findShortestPathObj(this.jobObj,false).jobDistance);
-    console.log(this.findShortestPathObj(this.jobObj,true).jobDistance);
+
   }
 
   groupJobs() {
-    this.findShortestPathObj(this.jobObj,false).groupId = 1;
+    let jobsPerGroup = document.getElementById('jobsPerGroup').value;
+    let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
+    let jobsAmount = Object.keys(this.jobObj).length;
+
+    console.log('groupCount: ' + groupCount);
+    for(let i = 1; i<=groupCount;i++){
+      let currentJob = this.findShortestPathObj(this.jobObj,false);
+      currentJob.groupId = i;
+      
+      for(let k = 0; k<jobsPerGroup-1;k++) {
+        let possibleJobPartners = this.getAllUngroupedJobs();
+        let compoundDistance=1000;
+        let selectedJobPartnerId;
+
+        for(let j=1; j<Object.keys(this.jobObj).length; j++) {
+          if(typeof possibleJobPartners[j]!='undefined') {
+            let joinedItems = {};
+            joinedItems.items = possibleJobPartners[j].items.concat(currentJob.items);
+            joinedItems.items.sort(function(a, b){return a-b});
+            if(this.calculateSingleJobDistance(joinedItems)<compoundDistance) {
+              compoundDistance = this.calculateSingleJobDistance(joinedItems);
+              selectedJobPartnerId = j;
+            }
+          }
+        }
+        if(typeof this.jobObj[selectedJobPartnerId] != 'undefined') {
+          this.jobObj[selectedJobPartnerId].groupId = i;
+        }
+      }
+    }
+
+  }
+
+  getAllUngroupedJobs() {
+    let ungroupedJobs = {};
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      if(typeof this.jobObj[i].groupId == 'undefined') {
+          ungroupedJobs[i] = this.jobObj[i];
+      }
+    }
+    return ungroupedJobs;
   }
 
   findShortestPathObj(jobObj, shortest) {
     var singleJobObj = jobObj[1];
-
-    for(var i=1; i<=Object.keys(jobObj).length;i++) {
-      if(singleJobObj.jobDistance>jobObj[i].jobDistance && shortest == true){
-        singleJobObj = jobObj[i];
+    
+    for(var j=1; j<=Object.keys(jobObj).length;j++) {
+      if(typeof jobObj[j].groupId == 'undefined') {
+        singleJobObj = jobObj[j];
+        continue;
       }
-      if(singleJobObj.jobDistance<jobObj[i].jobDistance && shortest == false){
-        singleJobObj = jobObj[i];
+    }
+    
+    for(var i=1; i<=Object.keys(jobObj).length;i++) {
+      if(typeof jobObj[i].groupId == 'undefined'){
+        if (singleJobObj.jobDistance > jobObj[i].jobDistance && shortest == true) {
+          singleJobObj = jobObj[i];
+        }
+        if (singleJobObj.jobDistance < jobObj[i].jobDistance && shortest == false) {
+          singleJobObj = jobObj[i];
+        }
       }
     }
     return singleJobObj;
@@ -83,6 +131,7 @@ class IndexController {
 
     for(var j=0;j<singleJobObj.items.length;j++) {
       var singleItem = singleJobObj.items[j];
+
       var goToLane = Math.floor(singleItem / slotsInLane)+1;
       distance += (goToLane-currentLane)*costTraversing;
 
