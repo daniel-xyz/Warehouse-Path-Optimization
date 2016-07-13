@@ -30,7 +30,7 @@ class IndexController {
       generatedData += 'customer'+i+',';
 
       for(var j = 0; j<items;j++){
-        generatedData += Math.round(Math.random()*63) + ',';
+        generatedData += Math.round(Math.random()*((grid.getSlotsInLane()*grid.getLanes())-1)) + ',';
       }
       generatedData = generatedData.substring(0,generatedData.length-1) + '\n';
     }
@@ -59,7 +59,6 @@ class IndexController {
     let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
     let jobsAmount = Object.keys(this.jobObj).length;
 
-    console.log('groupCount: ' + groupCount);
     for(let i = 1; i<=groupCount;i++){
       let currentJob = this.findShortestPathObj(this.jobObj,false);
       currentJob.groupId = i;
@@ -122,7 +121,7 @@ class IndexController {
   }
 
   calculateSingleJobDistance(singleJobObj) {
-    var slotsInLane = 8;//grid.getSlotsInLane();
+    var slotsInLane = grid.getSlotsInLane();
     var costTraversing = 0.1;
     var costPerLane = 1;
 
