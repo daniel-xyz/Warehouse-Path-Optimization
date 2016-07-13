@@ -5,7 +5,9 @@
 //import FileLoader from 'FileLoader';
 
 class IndexController {
+
   constructor (){
+    var jobObj;
   }
 
   readSingleFile(e) {
@@ -21,11 +23,11 @@ class IndexController {
   }
 
   generateJobs() {
-    var generatedData = 'name,groupId,item1,item2,item3,item4,item5,item6\n';
+    var generatedData = 'name,item1,item2,item3,item4,item5,item6\n';
     for(var i=1;i<=10;i++){
       var items = Math.round(Math.random() * 3) + 3;
 
-      generatedData += 'customer'+i+','+i+',';
+      generatedData += 'customer'+i+',';
 
       for(var j = 0; j<items;j++){
         generatedData += Math.round(Math.random()*63) + ',';
@@ -36,41 +38,62 @@ class IndexController {
     document.getElementById('job-container').value = generatedData;
   }
 
-  optimizeJobs() {
-    var jobObj = this.processData(document.getElementById('job-container').value);
-    var slotsInLane = 8;//grid.getSlotsInLane();
+  calculateJobDistance() {
+    this.jobObj = this.processData(document.getElementById('job-container').value);
+    //for(var singleJobObj of jobObj) {
+    
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      var singleJobObj = this.jobObj[i];
 
+      this.jobObj[i].jobDistance = this.calculateSingleJobDistance(singleJobObj);
+    }
+
+    this.groupJobs();
+    
+    console.log(this.jobObj);
+    console.log(this.findShortestPathObj(this.jobObj,false).jobDistance);
+    console.log(this.findShortestPathObj(this.jobObj,true).jobDistance);
+  }
+
+  groupJobs() {
+    this.findShortestPathObj(this.jobObj,false).groupId = 1;
+  }
+
+  findShortestPathObj(jobObj, shortest) {
+    var singleJobObj = jobObj[1];
+
+    for(var i=1; i<=Object.keys(jobObj).length;i++) {
+      if(singleJobObj.jobDistance>jobObj[i].jobDistance && shortest == true){
+        singleJobObj = jobObj[i];
+      }
+      if(singleJobObj.jobDistance<jobObj[i].jobDistance && shortest == false){
+        singleJobObj = jobObj[i];
+      }
+    }
+    return singleJobObj;
+  }
+
+  calculateSingleJobDistance(singleJobObj) {
+    var slotsInLane = 8;//grid.getSlotsInLane();
     var costTraversing = 0.1;
     var costPerLane = 1;
 
-    //for(var singleJobObj of jobObj) {
+    var distance = 0;
+    var currentLane = 0;
 
-    for(var i=1; i<=Object.keys(jobObj).length;i++) {
-      var singleJobObj = jobObj[i];
-      var currentLane = 0;
-      var distance = 0;
+    for(var j=0;j<singleJobObj.items.length;j++) {
+      var singleItem = singleJobObj.items[j];
+      var goToLane = Math.floor(singleItem / slotsInLane)+1;
+      distance += (goToLane-currentLane)*costTraversing;
 
-      for(var j=0;j<singleJobObj.items.length;j++) {
-        var singleItem = singleJobObj.items[j];
-        var goToLane = Math.floor(singleItem / slotsInLane)+1;
-        console.log('im in lane:'+currentLane);
-        console.log('iwant to go to lane:'+goToLane);
-        console.log('Traversing costs:'+(goToLane-currentLane)*costTraversing);
-        distance += (goToLane-currentLane)*costTraversing;
-        if(goToLane != currentLane){
-          console.log('Entering new Lane costs:' + costPerLane);
-          distance += costPerLane;
-        }
-        currentLane = goToLane;
-        jobObj[i].jobDistance = distance;
-        console.log(jobObj[i].jobDistance);
+      if(goToLane != currentLane){
+        distance += costPerLane;
       }
-      console.log('lastLane:'+ currentLane + ' cost: ' + currentLane*costTraversing);
-      jobObj[i].jobDistance += currentLane * costTraversing;
-      jobObj[i].jobDistance = (jobObj[i].jobDistance).toFixed(1);
+      currentLane = goToLane;
     }
+    distance = distance + currentLane * costTraversing;
 
-    console.log(jobObj);
+    return (distance).toFixed(1);
   }
 
  
