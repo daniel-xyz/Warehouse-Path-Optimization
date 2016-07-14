@@ -6,7 +6,6 @@ $(document).ready(function() {
       item = '#item',
       slotSize = grid.getSlotPixelSize(),
       currentDirection = "up",
-      testWaypoints = [73, 65, 20, 19, 3, 10],
       testJobGroup = {
         groupId: 10,
         items: [2, 87, 89],
@@ -38,6 +37,8 @@ $(document).ready(function() {
       waypointQueue[i] = grid.getWaypointNr(itemQueue[i]);
     }
 
+    console.log("Waypoints in animation queue aufgenommen: " + waypointQueue);
+
     showItems(itemQueue);
     initPosition();
     animateNextAction();
@@ -65,21 +66,21 @@ $(document).ready(function() {
   }
 
   var moveToNextWaypoint = function(waypointNr, callback) {
-    var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35;
-    var rowOffsetBottom = $('#waypoint-' + (grid.getSlotsInLane()/2)).offset().top + slotSize + 5;
-    var $waypoint = $('#waypoint-' + waypointNr);
-    var wpOffsetLeft = $waypoint.offset().left - 5;
-    var wpOffsetTop = $waypoint.offset().top;
-    var movedToLane = false;
-    var movedToSlot = false;
-    var movedToOffsetRow = false;
+    var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35,
+        rowOffsetBottom = $('#waypoint-' + (grid.getSlotsInLane()/2)).offset().top + slotSize + 5,
+        $waypoint = $('#waypoint-' + waypointNr),
+        wpOffsetLeft = $waypoint.offset().left - 5,
+        wpOffsetTop = $waypoint.offset().top,
+        movedToLane = false,
+        movedToSlot = false,
+        movedToOffsetRow = false;
 
     triggerNextAnimation();
 
     function triggerNextAnimation() {
-      var robotOffsetLeft = $robot.offset().left;
-      var robotOffsetTop = $robot.offset().top;
-      var isInOffsetRow = (rowOffsetTop >= robotOffsetTop) || (rowOffsetBottom <= robotOffsetTop);
+      var robotOffsetLeft = $robot.offset().left,
+          robotOffsetTop = $robot.offset().top,
+          isInOffsetRow = (rowOffsetTop >= robotOffsetTop) || (rowOffsetBottom <= robotOffsetTop);
 
       if (!movedToLane && (wpOffsetLeft > robotOffsetLeft)) {
         switchLane();
