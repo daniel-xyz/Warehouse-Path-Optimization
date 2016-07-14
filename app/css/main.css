@@ -43,7 +43,12 @@ h1 {
   position: absolute;
   offset-before: 100px;
 }
-.job-container {
+#job-container {
   display: inline-block;
+  width: 400px;
+  height: 200px;
+}
+.optimizedJobTable {
+
 }
 

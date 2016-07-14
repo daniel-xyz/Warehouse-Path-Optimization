@@ -51,7 +51,39 @@ class IndexController {
     this.groupJobs();
 
     console.log(this.jobObj);
+    this.printTable();
+  }
 
+  printTable() {
+    var tableContent = '<table>' +
+      '<tr>' +
+      '<td>Id</td>' +
+      '<td>Group</td>' +
+      '<td>Name</td>' +
+      '<td>Items</td>' +
+      '<td>Distance</td>' +
+      '</tr>\n';
+
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      tableContent += '<tr>' +
+          '<td>' + i + '</td>' +
+          '<td>' + this.jobObj[i].groupId + '</td>' +
+          '<td>' + this.jobObj[i].name + '</td>' +
+          '<td>' + this.jobObj[i].items + '</td>' +
+          '<td>' + this.jobObj[i].jobDistance + '</td>' +
+          '<td><input type="Button" value="start" onclick="'+this.animateJobsWithId(i)+'"></input></td>' +
+        '</tr>'
+    }
+
+    tableContent += '</table>';
+
+    document.getElementById('optimizedJobTable').innerHTML = tableContent;
+  }
+
+  animateJobsWithId(groupId) {
+    for (var i = 1; i <= Object.keys(this.jobObj).length; i++) {
+      //hier könnte ich nur die selektierten gruppen wählen und in ein objekt schicken und an deine animationsfunktion senden
+    }
   }
 
   groupJobs() {
@@ -172,5 +204,5 @@ class IndexController {
 
 }
 
-var indexController = new IndexController();
+var indexController = new IndexController(jQuery);
 
