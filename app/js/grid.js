@@ -82,17 +82,19 @@ Grid.prototype.render = function() {
           }).appendTo('#waypoint-' + waypointNr);
         }
         // Item
-        $('<div id=' + "item-" + slotNr + '/>').css({
+        $('<div id=' + "item-" + slotNr + '>' + slotNr + '</div>').css({
           'position': 'absolute',
           'display': 'none',
           'top': 2,
           'left': 2,
           'width': size - 6,
           'height': size - 6,
-          'color': '#3CB371',
+          'color': '#ffffff',
+          'text-align': 'center',
+          'line-height': size - 6 + 'px',
           'background-color': '#3CB371',
           'border': '1px',
-          'border-style': 'solid',
+          'border-style': 'none',
           'border-radius': 30
         }).appendTo('#slot-' + slotNr);
       }

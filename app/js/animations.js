@@ -13,7 +13,8 @@ $(document).ready(function() {
         jobDistance: 2.8,
         name: "customer 1"
       },
-      itemQueue = [];
+      itemQueue = [],
+      waypointQueue = [];
 
   move.defaults = {
     duration: 800
@@ -32,9 +33,14 @@ $(document).ready(function() {
   var animateJobGroup = function(jobGroup) {
     itemQueue = jobGroup['items'];
     console.log("Items in animation queue aufgenommen: " + itemQueue);
+
+    for (var i = 0; i < itemQueue.length; i++) {
+      waypointQueue[i] = grid.getWaypointNr(itemQueue[i]);
+    }
+
     showItems(itemQueue);
     initPosition();
-    moveToNextWaypoint();
+    animateNextAction();
   };
 
   function showItems(items) {
@@ -43,7 +49,22 @@ $(document).ready(function() {
     }
   }
 
-  var moveToWaypoint = function(waypointNr, callback) {
+  function takeItem(itemNr, callback) {
+    move('#item-' + itemNr)
+      .set('background-color', 'white')
+      .duration('1s')
+      .end(callback);
+  }
+
+  function takeNextItem() {
+    var nextItem = itemQueue.shift();
+
+    if (nextItem !== undefined) {
+      takeItem(nextItem, animateNextAction);
+    }
+  }
+
+  var moveToNextWaypoint = function(waypointNr, callback) {
     var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35;
     var rowOffsetBottom = $('#waypoint-' + (grid.getSlotsInLane()/2)).offset().top + slotSize + 5;
     var $waypoint = $('#waypoint-' + waypointNr);
@@ -107,11 +128,11 @@ $(document).ready(function() {
     }
   };
 
-  function moveToNextWaypoint() {
-    var nextItem = itemQueue.shift();
+  function animateNextAction() {
+    var nextWaypoint = waypointQueue.shift();
 
-    if (nextItem !== undefined) {
-      moveToWaypoint(grid.getWaypointNr(nextItem), moveToNextWaypoint);
+    if (nextWaypoint !== undefined) {
+      moveToNextWaypoint(nextWaypoint, takeNextItem);
     } else {
       celebrate();
     }
