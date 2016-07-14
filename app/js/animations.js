@@ -6,7 +6,14 @@ $(document).ready(function() {
       item = '#item',
       slotSize = grid.getSlotPixelSize(),
       currentDirection = "up",
-      testWaypoints = [73, 65, 20, 19, 3, 10];
+      testWaypoints = [73, 65, 20, 19, 3, 10],
+      testJobGroup = {
+        groupId: 10,
+        items: [2, 87, 89],
+        jobDistance: 2.8,
+        name: "customer 1"
+      },
+      itemQueue = [];
 
   move.defaults = {
     duration: 800
@@ -21,6 +28,20 @@ $(document).ready(function() {
       'margin-left': $lastWaypointInFirstLane.position().left - (2 * slotSize)
     });
   };
+
+  var animateJobGroup = function(jobGroup) {
+    itemQueue = jobGroup['items'];
+    console.log("Items in animation queue aufgenommen: " + itemQueue);
+    showItems(itemQueue);
+    initPosition();
+    moveToNextWaypoint();
+  };
+
+  function showItems(items) {
+    for (var i = 0; i < items.length; i++) {
+      $('#item-' + items[i]).show();
+    }
+  }
 
   var moveToWaypoint = function(waypointNr, callback) {
     var rowOffsetTop = $('#waypoint-1').offset().top - slotSize - 35;
@@ -86,11 +107,11 @@ $(document).ready(function() {
     }
   };
 
-  function robotTest() {
-    var waypoint = testWaypoints.pop();
+  function moveToNextWaypoint() {
+    var nextItem = itemQueue.shift();
 
-    if (waypoint !== undefined) {
-      moveToWaypoint(waypoint, robotTest);
+    if (nextItem !== undefined) {
+      moveToWaypoint(grid.getWaypointNr(nextItem), moveToNextWaypoint);
     } else {
       celebrate();
     }
@@ -104,6 +125,7 @@ $(document).ready(function() {
 
   window.setTimeout(function() {
     initPosition();
-    robotTest();
+    animateJobGroup(testJobGroup);
+    //robotTest();
   }, 1000);
 });

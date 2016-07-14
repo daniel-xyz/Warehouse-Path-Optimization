@@ -34,7 +34,6 @@ Grid.prototype.getWaypointNr = function(slotNr) {
 Grid.prototype.render = function() {
 
   renderGrid();
-  renderItems();
 
   function renderGrid() {
     var size = grid.getSlotPixelSize();
@@ -82,29 +81,20 @@ Grid.prototype.render = function() {
             'z-index': -1
           }).appendTo('#waypoint-' + waypointNr);
         }
-      }
-    }
-  }
-
-  function renderItems() {
-    var size = grid.getSlotPixelSize();
-
-    for(var job in testJobs) {
-      if (testJobs.hasOwnProperty(job)) {
-        testJobs[job].forEach(function(slotNr) {
-          $('<div id=' + "item-" + slotNr + '/>').css({
-            'position': 'absolute',
-            'top': 2,
-            'left': 2,
-            'width': size - 6,
-            'height': size - 6,
-            'color': '#3CB371',
-            'background-color': '#3CB371',
-            'border': '1px',
-            'border-style': 'solid',
-            'border-radius': 30
-          }).appendTo('#slot-' + slotNr);
-        })
+        // Item
+        $('<div id=' + "item-" + slotNr + '/>').css({
+          'position': 'absolute',
+          'display': 'none',
+          'top': 2,
+          'left': 2,
+          'width': size - 6,
+          'height': size - 6,
+          'color': '#3CB371',
+          'background-color': '#3CB371',
+          'border': '1px',
+          'border-style': 'solid',
+          'border-radius': 30
+        }).appendTo('#slot-' + slotNr);
       }
     }
   }
