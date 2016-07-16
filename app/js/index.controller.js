@@ -50,9 +50,24 @@ class IndexController {
     }
 
     this.groupJobs();
-
     console.log(this.jobObj);
+
+    this.calculateGroupDistance();
     this.printTable();
+  }
+  
+  calculateGroupDistance() {
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      var singleJobObj = this.jobObj[i];
+      var selectedJobs = this.getJobsWithGroupId(singleJobObj.groupId);
+      var groupJob = {};
+      groupJob.items = [];
+
+      for(var j=1; j<=Object.keys(selectedJobs).length;j++) {
+        selectedJobs[j].items.forEach(function(singleItem){groupJob.items.push(singleItem)});
+      }
+      singleJobObj.groupDistance = this.calculateSingleJobDistance(groupJob);
+    }
   }
 
   printTable() {
@@ -62,7 +77,8 @@ class IndexController {
       '<td>Group</td>' +
       '<td>Name</td>' +
       '<td>Items</td>' +
-      '<td>Distance</td>' +
+      '<td>JDistance</td>' +
+      '<td>GDistance</td>' +
       '</tr>\n';
 
     for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
@@ -72,7 +88,8 @@ class IndexController {
           '<td>' + this.jobObj[i].name + '</td>' +
           '<td>' + this.jobObj[i].items + '</td>' +
           '<td>' + this.jobObj[i].jobDistance + '</td>' +
-          '<td><input type="Button" value="start" onclick="new animations(indexController.animateJobsWithId('+i+'))"))"></input></td>' +
+          '<td>' + this.jobObj[i].groupDistance + '</td>' +
+          '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId('+this.jobObj[i].groupId+'))"))"></input></td>' +
         '</tr>'
     }
 
@@ -81,12 +98,16 @@ class IndexController {
     document.getElementById('optimizedJobTable').innerHTML = tableContent;
   }
 
-  animateJobsWithId(groupId) {
-    console.log('reached');
+  getJobsWithGroupId(groupId) {
+    var jobsWithSameGroupId = {};
+    var j = 0;
     for (let i = 1; i <= Object.keys(this.jobObj).length; i++) {
-      //hier könnte ich nur die selektierten gruppen wählen und in ein objekt schicken und an deine animationsfunktion senden
+      if(this.jobObj[i].groupId == groupId){
+        j++;
+        jobsWithSameGroupId[j] = this.jobObj[i];
+      }
     }
-    return this.jobObj[groupId];
+    return jobsWithSameGroupId;
   }
 
   groupJobs() {
@@ -103,7 +124,7 @@ class IndexController {
         let compoundDistance=1000;
         let selectedJobPartnerId;
 
-        for(let j=1; j<Object.keys(this.jobObj).length; j++) {
+        for(let j=1; j<=Object.keys(this.jobObj).length; j++) {
           if(typeof possibleJobPartners[j]!='undefined') {
             let joinedItems = {};
             joinedItems.items = possibleJobPartners[j].items.concat(currentJob.items);
@@ -126,7 +147,7 @@ class IndexController {
     let ungroupedJobs = {};
     for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
       if(typeof this.jobObj[i].groupId == 'undefined') {
-          ungroupedJobs[i] = this.jobObj[i];
+        ungroupedJobs[i] = this.jobObj[i];
       }
     }
     return ungroupedJobs;

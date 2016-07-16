@@ -31,9 +31,15 @@ var animations = function(inJobs) {
   };
 
   var animateJobGroup = function(jobGroup) {
-    itemQueue = jobGroup['items'];
-    console.log("Items in animation queue aufgenommen: " + itemQueue);
+    for(var j=1; j<=Object.keys(jobGroup).length;j++){
+      jobGroup[j].items.forEach(function(selected){itemQueue.push(selected)} );
 
+    }
+    itemQueue.sort(function(a,b){return a-b});
+
+    console.log(itemQueue);
+    console.log("Items in animation queue aufgenommen: " + itemQueue);
+  
     for (var i = 0; i < itemQueue.length; i++) {
       waypointQueue[i] = grid.getWaypointNr(itemQueue[i]);
     }
@@ -132,7 +138,6 @@ var animations = function(inJobs) {
 
   function animateNextAction() {
     var nextWaypoint = waypointQueue.shift();
-
     if (nextWaypoint !== undefined) {
       moveToNextWaypoint(nextWaypoint, takeNextItem);
     } else {
@@ -141,6 +146,7 @@ var animations = function(inJobs) {
   }
 
   function celebrate() {
+
     move(robot)
       .rotate(720)
       .end();
