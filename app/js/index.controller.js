@@ -49,7 +49,12 @@ class IndexController {
       this.jobObj[i].jobDistance = this.calculateSingleJobDistance(singleJobObj);
     }
 
-    this.groupJobs();
+    if(document.getElementById('ruleShortest').checked == true){
+      this.groupJobsPerDistance();
+    }
+    if(document.getElementById('ruleAlley').checked == true){
+      this.groupJobsPerAlley();
+    }
     console.log(this.jobObj);
 
     this.calculateGroupDistance();
@@ -110,7 +115,7 @@ class IndexController {
     return jobsWithSameGroupId;
   }
 
-  groupJobs() {
+  groupJobsPerDistance() {
     let jobsPerGroup = document.getElementById('jobsPerGroup').value;
     let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
     let jobsAmount = Object.keys(this.jobObj).length;
@@ -141,6 +146,28 @@ class IndexController {
       }
     }
 
+  }
+
+  groupJobsPerAlley(){
+    let jobsPerGroup = document.getElementById('jobsPerGroup').value;
+    let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
+    let jobsAmount = Object.keys(this.jobObj).length;
+
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      let singleJob = this.jobObj[i];
+      singleJob.alley = [];
+      for(var j=0; j<singleJob.items.length;j++) {
+        let singleItem = singleJob.items[j];
+
+        this.jobObj[i].alley.push(Math.floor(singleItem / grid.getSlotsInLane())+1);
+      }
+    }
+    
+    console.log(this.jobObj);
+
+      for(let i = 1; i<=groupCount;i++) {
+
+    }
   }
 
   getAllUngroupedJobs() {
