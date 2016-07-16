@@ -6,7 +6,8 @@
 
 class IndexController {
 
-  constructor (){
+  constructor ($){
+    var $ = $;
     var jobObj;
   }
 
@@ -71,7 +72,7 @@ class IndexController {
           '<td>' + this.jobObj[i].name + '</td>' +
           '<td>' + this.jobObj[i].items + '</td>' +
           '<td>' + this.jobObj[i].jobDistance + '</td>' +
-          '<td><input type="Button" value="start" onclick="'+this.animateJobsWithId(i)+'"></input></td>' +
+          '<td><input type="Button" value="start" onclick="new animations(indexController.animateJobsWithId('+i+'))"))"></input></td>' +
         '</tr>'
     }
 
@@ -81,9 +82,11 @@ class IndexController {
   }
 
   animateJobsWithId(groupId) {
-    for (var i = 1; i <= Object.keys(this.jobObj).length; i++) {
+    console.log('reached');
+    for (let i = 1; i <= Object.keys(this.jobObj).length; i++) {
       //hier könnte ich nur die selektierten gruppen wählen und in ein objekt schicken und an deine animationsfunktion senden
     }
+    return this.jobObj[groupId];
   }
 
   groupJobs() {
@@ -203,6 +206,10 @@ class IndexController {
   }
 
 }
+var indexController;
 
-var indexController = new IndexController(jQuery);
+$(document).ready(function ($){
+  console.log('instantiated index controller');
+  indexController = new IndexController($);
+})
 

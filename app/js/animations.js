@@ -1,4 +1,5 @@
-$(document).ready(function() {
+var animations = function(inJobs) {
+  var inJobs = inJobs;
   var robot = '#robot',
       $robot = $('#robot'),
       waypoint = '#waypoint',
@@ -147,7 +148,7 @@ $(document).ready(function() {
 
   window.setTimeout(function() {
     initPosition();
-    animateJobGroup(testJobGroup);
+    animateJobGroup(inJobs);
     //robotTest();
   }, 1000);
-});
+};
