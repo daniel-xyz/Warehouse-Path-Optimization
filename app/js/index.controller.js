@@ -55,7 +55,6 @@ class IndexController {
     if(document.getElementById('ruleAlley').checked == true){
       this.groupJobsPerAlley();
     }
-    console.log(this.jobObj);
 
     this.calculateGroupDistance();
     this.printTable();
@@ -82,6 +81,7 @@ class IndexController {
       '<td>Group</td>' +
       '<td>Name</td>' +
       '<td>Items</td>' +
+      '<td>Alley</td>' +
       '<td>JDistance</td>' +
       '<td>GDistance</td>' +
       '</tr>\n';
@@ -92,6 +92,7 @@ class IndexController {
           '<td>' + this.jobObj[i].groupId + '</td>' +
           '<td>' + this.jobObj[i].name + '</td>' +
           '<td>' + this.jobObj[i].items + '</td>' +
+          '<td>' + this.jobObj[i].alley + '</td>' +
           '<td>' + this.jobObj[i].jobDistance + '</td>' +
           '<td>' + this.jobObj[i].groupDistance + '</td>' +
           '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId('+this.jobObj[i].groupId+'))"))"></input></td>' +
@@ -99,7 +100,7 @@ class IndexController {
     }
 
     tableContent += '<tr>' +
-      '<td></td><td></td><td></td><td></td><td>'+this.sumJobDistance()+'</td><td>'+this.sumGroupDistance()+'</td>' +
+      '<td></td><td></td><td></td><td></td><td></td><td>'+this.sumJobDistance()+'</td><td>'+this.sumGroupDistance()+'</td>' +
       '</tr>' +
       '</table>';
 
@@ -117,7 +118,6 @@ class IndexController {
   sumGroupDistance() {
     let jobsPerGroup = document.getElementById('jobsPerGroup').value;
     let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
-    console.log(groupCount);
     let sumDistance = 0;
 
     for(let i = 1; i<=groupCount; i++){
@@ -193,37 +193,39 @@ class IndexController {
         let mostSimilarJob = this.findMostSimilarJob(selectedJob);
         if(typeof mostSimilarJob != 'undefined'){
           mostSimilarJob.groupId = i;
-
         }
       }
     }
-    console.log(this.jobObj);
   }
 
   findMostSimilarJob(sourceJob) {
     let ungroupedJobs = this.getAllUngroupedJobs();
-    console.log(ungroupedJobs);
 
     let bestMatchingJob;
     let lastMatchCount = 0;
 
-    for (let i = 1; i <= Object.keys(ungroupedJobs).length; i++) {
+    for (let i = 1; i <= Object.keys(this.jobObj).length; i++) {
       if(typeof ungroupedJobs[i]!='undefined') {
 
         let ungroupedJob = ungroupedJobs[i];
         let currentMatchCount = 0;
 
-        for (let j = 0; j <= sourceJob.items.length; j++) {
-          let singleSourceItem = sourceJob.items[j];
-          if (ungroupedJob.items.indexOf(singleSourceItem) != -1) {
+        for (let j = 0; j < ungroupedJob.alley.length; j++) {
+
+          let singleSourceTarget = ungroupedJob.alley[j];
+          if (sourceJob.alley.indexOf(singleSourceTarget) != -1) {
             currentMatchCount++;
           }
-        }
-        if (currentMatchCount=>lastMatchCount) {
-          bestMatchingJob = ungroupedJob;
-          lastMatchCount = currentMatchCount;
+
+          if (currentMatchCount>lastMatchCount) {
+            bestMatchingJob = ungroupedJob;
+            lastMatchCount = currentMatchCount;
+          }
         }
       }
+    }
+    if(typeof bestMatchingJob == 'undefined') {
+      bestMatchingJob = this.getFirstExistingJob(this.getAllUngroupedJobs());
     }
     return bestMatchingJob;
   }
@@ -335,7 +337,6 @@ class IndexController {
 var indexController;
 
 $(document).ready(function ($){
-  console.log('instantiated index controller');
   indexController = new IndexController($);
 })
 
