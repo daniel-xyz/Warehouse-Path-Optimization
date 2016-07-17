@@ -75,7 +75,8 @@ class IndexController {
   }
 
   printTable() {
-    var tableContent = '<table>' +
+    let groupsPrinted = [];
+    let tableContent = '<table>' +
       '<tr>' +
       '<td>Id</td>' +
       '<td>Group</td>' +
@@ -94,9 +95,12 @@ class IndexController {
           '<td>' + this.jobObj[i].items + '</td>' +
           '<td>' + this.jobObj[i].alley + '</td>' +
           '<td>' + this.jobObj[i].jobDistance + '</td>' +
-          '<td>' + this.jobObj[i].groupDistance + '</td>' +
-          '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId('+this.jobObj[i].groupId+'))"))"></input></td>' +
-        '</tr>'
+          '<td>' + this.jobObj[i].groupDistance + '</td>';
+      if(groupsPrinted.indexOf(this.jobObj[i].groupId)==-1) {
+        tableContent += '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId(' + this.jobObj[i].groupId + '))"))"></input></td>';
+      }
+      tableContent += '</tr>';
+      groupsPrinted.push(this.jobObj[i].groupId);
     }
 
     tableContent += '<tr>' +
