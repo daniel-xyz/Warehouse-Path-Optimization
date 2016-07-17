@@ -98,11 +98,41 @@ class IndexController {
         '</tr>'
     }
 
-    tableContent += '</table>';
+    tableContent += '<tr>' +
+      '<td></td><td></td><td></td><td></td><td>'+this.sumJobDistance()+'</td><td>'+this.sumGroupDistance()+'</td>' +
+      '</tr>' +
+      '</table>';
 
     document.getElementById('optimizedJobTable').innerHTML = tableContent;
   }
+  
+  sumJobDistance() {
+    let sumDistance = 0;
+    for (let i = 1; i <= Object.keys(this.jobObj).length; i++) {
+      sumDistance += parseFloat(this.jobObj[i].jobDistance);
+    }
+    return sumDistance.toFixed(1);
+  }
 
+  sumGroupDistance() {
+    let jobsPerGroup = document.getElementById('jobsPerGroup').value;
+    let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
+    console.log(groupCount);
+    let sumDistance = 0;
+
+    for(let i = 1; i<=groupCount; i++){
+      for (let j = 1; j <= Object.keys(this.jobObj).length; j++) {
+        let selectedObj = this.jobObj[j];
+
+        if(selectedObj.groupId == i){
+          sumDistance += parseFloat(selectedObj.groupDistance);
+          break;
+        }
+      }
+
+    }
+    return sumDistance.toFixed(1);
+  }
   getJobsWithGroupId(groupId) {
     var jobsWithSameGroupId = {};
     var j = 0;
@@ -153,23 +183,63 @@ class IndexController {
     let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
     let jobsAmount = Object.keys(this.jobObj).length;
 
-    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
-      let singleJob = this.jobObj[i];
-      singleJob.alley = [];
-      for(var j=0; j<singleJob.items.length;j++) {
-        let singleItem = singleJob.items[j];
+    this.calculateAlleys();
 
-        this.jobObj[i].alley.push(Math.floor(singleItem / grid.getSlotsInLane())+1);
+    for(let i = 1; i<=groupCount;i++) {
+      let selectedJob = this.getFirstExistingJob(this.getAllUngroupedJobs());
+      selectedJob.groupId = i;
+
+      for (let j = 1; j < jobsPerGroup; j++) {
+        let mostSimilarJob = this.findMostSimilarJob(selectedJob);
+        if(typeof mostSimilarJob != 'undefined'){
+          mostSimilarJob.groupId = i;
+
+        }
       }
     }
-    
     console.log(this.jobObj);
-
-      for(let i = 1; i<=groupCount;i++) {
-
-    }
   }
 
+  findMostSimilarJob(sourceJob) {
+    let ungroupedJobs = this.getAllUngroupedJobs();
+    console.log(ungroupedJobs);
+
+    let bestMatchingJob;
+    let lastMatchCount = 0;
+
+    for (let i = 1; i <= Object.keys(ungroupedJobs).length; i++) {
+      if(typeof ungroupedJobs[i]!='undefined') {
+
+        let ungroupedJob = ungroupedJobs[i];
+        let currentMatchCount = 0;
+
+        for (let j = 0; j <= sourceJob.items.length; j++) {
+          let singleSourceItem = sourceJob.items[j];
+          if (ungroupedJob.items.indexOf(singleSourceItem) != -1) {
+            currentMatchCount++;
+          }
+        }
+        if (currentMatchCount=>lastMatchCount) {
+          bestMatchingJob = ungroupedJob;
+          lastMatchCount = currentMatchCount;
+        }
+      }
+    }
+    return bestMatchingJob;
+  }
+
+  calculateAlleys() {
+
+  for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+    let singleJob = this.jobObj[i];
+    singleJob.alley = [];
+    for(var j=0; j<singleJob.items.length;j++) {
+      let singleItem = singleJob.items[j];
+
+      this.jobObj[i].alley.push(Math.floor(singleItem / grid.getSlotsInLane())+1);
+    }
+  }
+}
   getAllUngroupedJobs() {
     let ungroupedJobs = {};
     for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
@@ -178,6 +248,14 @@ class IndexController {
       }
     }
     return ungroupedJobs;
+  }
+
+  getFirstExistingJob(inJobs) {
+    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
+      if(typeof inJobs[i] != 'undefined') {
+        return inJobs[i];
+      }
+    }
   }
 
   findShortestPathObj(jobObj, shortest) {
