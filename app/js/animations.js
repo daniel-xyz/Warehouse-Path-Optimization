@@ -18,6 +18,25 @@ var animations = function(inJobs) {
     duration: 800
   };
 
+  var reset = function() {
+    hideItems(itemQueue);
+    hideItems(unsortedItemQueue);
+
+    currentDirection = "up";
+    lastWaypoint = null;
+    lastItem = null;
+    unsortedItemQueue = [];
+    itemQueue = [];
+    waypointQueue = [];
+
+    initPosition();
+
+    $('[id^="item"]').css({
+      'opacity': 1,
+      'display': 'none'
+    });
+  };
+
   var initPosition = function() {
     var $lastWaypointInFirstLane = $('#waypoint-' + (grid.getSlotsInLane()/2));
 
@@ -29,6 +48,8 @@ var animations = function(inJobs) {
   };
 
   var animateJobGroup = function(jobGroup) {
+    reset();
+
     for(var j=1; j<=Object.keys(jobGroup).length;j++) {
       jobGroup[j].items.forEach(function(selected) {
         unsortedItemQueue.push(parseInt(selected))
@@ -47,7 +68,6 @@ var animations = function(inJobs) {
     console.log("Waypoints in animation queue aufgenommen: " + waypointQueue);
 
     showItems(itemQueue);
-    initPosition();
     animateNextAction();
   };
 
@@ -83,6 +103,12 @@ var animations = function(inJobs) {
   function showItems(items) {
     for (var i = 0; i < items.length; i++) {
       $('#item-' + items[i]).show();
+    }
+  }
+
+  function hideItems(items) {
+    for (var i = 0; i < items.length; i++) {
+      $('#item-' + items[i]).hide();
     }
   }
 
@@ -200,7 +226,6 @@ var animations = function(inJobs) {
   }
 
   function celebrate() {
-
     move(robot)
       .rotate(720)
       .end();
@@ -209,6 +234,5 @@ var animations = function(inJobs) {
   window.setTimeout(function() {
     initPosition();
     animateJobGroup(inJobs);
-    //robotTest();
   }, 1000);
 };

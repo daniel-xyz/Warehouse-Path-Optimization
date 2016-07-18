@@ -45,6 +45,7 @@ Grid.prototype.render = function() {
         var waypointNr = grid.getWaypointNr(slotNr);
 
         if (slot % 2 != 0) {
+
           // Waypoint
           $('<div id=' + "waypoint-" + waypointNr + '/>').css({
             'position': 'absolute',
@@ -68,6 +69,7 @@ Grid.prototype.render = function() {
             'z-index': -1
           }).appendTo('#waypoint-' + waypointNr);
         } else {
+
           // Right Slot
           $('<div id=' + "slot-" + slotNr + '><span class="slot-nr">'+slotNr+'</span></div>').css({
             'position': 'absolute',
@@ -81,6 +83,7 @@ Grid.prototype.render = function() {
             'z-index': -1
           }).appendTo('#waypoint-' + waypointNr);
         }
+
         // Item
         $('<div id=' + "item-" + slotNr + '>' + slotNr + '</div>').css({
           'position': 'absolute',
@@ -99,5 +102,13 @@ Grid.prototype.render = function() {
         }).appendTo('#slot-' + slotNr);
       }
     }
+
+    // Table
+    $('<div id="optimizedJobTable"/>').css({
+      'position': 'absolute',
+      'top': (grid.getSlotsInLane()/2 * size) + (slot * 6),
+      'left': 0,
+      'z-index': -1
+    }).appendTo('.grid-container');
   }
 };
