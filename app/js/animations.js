@@ -6,7 +6,10 @@ var animations = function(inJobs) {
       slot = '#slot',
       item = '#item',
       slotSize = grid.getSlotPixelSize(),
+      lanes = grid.getLanes(),
       currentDirection = "up",
+      lastWaypoint = null,
+      lastItem = null,
       unsortedItemQueue = [],
       itemQueue = [],
       waypointQueue = [];
@@ -52,7 +55,7 @@ var animations = function(inJobs) {
     var slotsInLane = grid.getSlotsInLane(),
         upMovement = true;
 
-    for (var lane = 1; lane <= grid.getLanes(); lane++) {
+    for (var lane = 1; lane <= lanes; lane++) {
       var laneQueue = [];
 
       unsortedItemQueue.forEach(function(item){
@@ -84,10 +87,15 @@ var animations = function(inJobs) {
   }
 
   function takeItem(itemNr, callback) {
-    move('#item-' + itemNr)
-      .set('background-color', 'white')
-      .duration('1s')
-      .end(callback);
+    if (lastItem === itemNr) {
+      callback();
+    } else {
+      lastItem = itemNr;
+      move('#item-' + itemNr)
+        .set('background-color', 'white')
+        .duration('0.3s')
+        .end(callback);
+    }
   }
 
   function takeNextItem() {
@@ -126,6 +134,7 @@ var animations = function(inJobs) {
         currentDirection = "down";
         movedToSlot = true;
       } else {
+        lastWaypoint = waypointNr;
         callback(waypointNr);
       }
 
@@ -162,12 +171,41 @@ var animations = function(inJobs) {
     }
   };
 
+  function moveToEnd(callback) {
+    var lastWaypoint,
+        moveRight = move(robot)
+          .add('margin-left', slotSize);
+
+    if (currentDirection === "down") {
+      lastWaypoint = grid.getSlotsInLane()/2 * lanes;
+      var offsetBottom = ($('#waypoint-' + lastWaypoint).offset().top + slotSize + 5) - $robot.offset().top;
+
+      move(robot)
+        .add('margin-top', offsetBottom)
+        .then(moveRight)
+        .end(callback);
+    } else {
+      lastWaypoint = (grid.getSlotsInLane()/2 * lanes) - (grid.getSlotsInLane()/2 - 1);
+      var offsetTop = $robot.offset().top - ($('#waypoint-' + lastWaypoint).offset().top - slotSize - 35);
+
+      move(robot)
+        .sub('margin-top', offsetTop)
+        .then(moveRight)
+        .end(callback);
+    }
+  }
+
   function animateNextAction() {
     var nextWaypoint = waypointQueue.shift();
+
     if (nextWaypoint !== undefined) {
-      moveToNextWaypoint(nextWaypoint, takeNextItem);
+      if (nextWaypoint === lastWaypoint) {
+        takeNextItem();
+      } else {
+        moveToNextWaypoint(nextWaypoint, takeNextItem);
+      }
     } else {
-      celebrate();
+      moveToEnd(celebrate);
     }
   }
 
