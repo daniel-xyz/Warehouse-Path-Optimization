@@ -56,7 +56,7 @@ Grid.prototype.render = function() {
           }).appendTo('.grid-container');
 
           // Left Slot
-          $('<div id=' + "slot-" + slotNr + '/><a>'+slotNr+'</a></div>').css({
+          $('<div id=' + "slot-" + slotNr + '><span class="slot-nr">'+slotNr+'</span></div>').css({
             'position': 'absolute',
             'top': 0,
             'right': size,
@@ -69,7 +69,7 @@ Grid.prototype.render = function() {
           }).appendTo('#waypoint-' + waypointNr);
         } else {
           // Right Slot
-          $('<div id=' + "slot-" + slotNr + '/><a>'+slotNr+'</a></div>').css({
+          $('<div id=' + "slot-" + slotNr + '><span class="slot-nr">'+slotNr+'</span></div>').css({
             'position': 'absolute',
             'top': 0,
             'left': size,

@@ -23,6 +23,12 @@ h1 {
   z-index: 1;
 }
 
+#job-container {
+  display: inline-block;
+  width: 400px;
+  height: 200px;
+}
+
 .main-container {
   margin: 20px;
   text-align: left;
@@ -43,12 +49,11 @@ h1 {
   position: absolute;
   offset-before: 100px;
 }
-#job-container {
-  display: inline-block;
-  width: 400px;
-  height: 200px;
-}
+
 .optimizedJobTable {
 
 }
 
+.slot-nr {
+  padding: 5px 0 0 2px;
+}

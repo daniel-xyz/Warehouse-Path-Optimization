@@ -92,7 +92,7 @@ var animations = function(inJobs) {
     } else {
       lastItem = itemNr;
       move('#item-' + itemNr)
-        .set('background-color', 'white')
+        .set('opacity', '0')
         .duration('0.3s')
         .end(callback);
     }
@@ -173,8 +173,10 @@ var animations = function(inJobs) {
 
   function moveToEnd(callback) {
     var lastWaypoint,
+        offsetLeft = ($('#waypoint-' + grid.getSlotsInLane()/2 * lanes).offset().left + (2 * slotSize)) -  $robot.offset().left,
         moveRight = move(robot)
-          .add('margin-left', slotSize);
+          .add('margin-left', offsetLeft)
+          .then(callback);
 
     if (currentDirection === "down") {
       lastWaypoint = grid.getSlotsInLane()/2 * lanes;
@@ -183,7 +185,7 @@ var animations = function(inJobs) {
       move(robot)
         .add('margin-top', offsetBottom)
         .then(moveRight)
-        .end(callback);
+        .end();
     } else {
       lastWaypoint = (grid.getSlotsInLane()/2 * lanes) - (grid.getSlotsInLane()/2 - 1);
       var offsetTop = $robot.offset().top - ($('#waypoint-' + lastWaypoint).offset().top - slotSize - 35);
@@ -191,7 +193,7 @@ var animations = function(inJobs) {
       move(robot)
         .sub('margin-top', offsetTop)
         .then(moveRight)
-        .end(callback);
+        .end();
     }
   }
 
