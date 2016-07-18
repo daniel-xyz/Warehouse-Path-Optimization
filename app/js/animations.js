@@ -7,12 +7,7 @@ var animations = function(inJobs) {
       item = '#item',
       slotSize = grid.getSlotPixelSize(),
       currentDirection = "up",
-      testJobGroup = {
-        groupId: 10,
-        items: [2, 87, 89],
-        jobDistance: 2.8,
-        name: "customer 1"
-      },
+      unsortedItemQueue = [],
       itemQueue = [],
       waypointQueue = [];
 
@@ -31,11 +26,13 @@ var animations = function(inJobs) {
   };
 
   var animateJobGroup = function(jobGroup) {
-    for(var j=1; j<=Object.keys(jobGroup).length;j++){
-      jobGroup[j].items.forEach(function(selected){itemQueue.push(selected)} );
-
+    for(var j=1; j<=Object.keys(jobGroup).length;j++) {
+      jobGroup[j].items.forEach(function(selected) {
+        unsortedItemQueue.push(parseInt(selected))
+      });
     }
-    itemQueue.sort(function(a,b){return a-b});
+
+    sortItemQueue(unsortedItemQueue);
 
     console.log(itemQueue);
     console.log("Items in animation queue aufgenommen: " + itemQueue);
@@ -50,6 +47,35 @@ var animations = function(inJobs) {
     initPosition();
     animateNextAction();
   };
+
+  function sortItemQueue(unsortedItemQueue) {
+    var slotsInLane = grid.getSlotsInLane(),
+        upMovement = true;
+
+    for (var lane = 1; lane <= grid.getLanes(); lane++) {
+      var laneQueue = [];
+
+      unsortedItemQueue.forEach(function(item){
+        if (((lane * slotsInLane) >= item) && (item > ((lane * slotsInLane) - slotsInLane))) {
+          laneQueue.push(item);
+        }
+      });
+
+      if (laneQueue.length > 0) {
+        if (upMovement) {
+          laneQueue.sort(function(a,b){return b-a});
+          upMovement = false;
+        } else {
+          laneQueue.sort(function(a,b){return a-b});
+          upMovement = true;
+        }
+
+        laneQueue.forEach(function(item){
+          itemQueue.push(item);
+        });
+      }
+    }
+  }
 
   function showItems(items) {
     for (var i = 0; i < items.length; i++) {
