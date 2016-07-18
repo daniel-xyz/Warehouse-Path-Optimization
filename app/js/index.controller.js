@@ -94,8 +94,13 @@ class IndexController {
           '<td>' + this.jobObj[i].name + '</td>' +
           '<td>' + this.jobObj[i].items + '</td>' +
           '<td>' + this.jobObj[i].alley + '</td>' +
-          '<td>' + this.jobObj[i].jobDistance + '</td>' +
-          '<td>' + this.jobObj[i].groupDistance + '</td>';
+          '<td>' + this.jobObj[i].jobDistance + '</td>';
+      if(groupsPrinted.indexOf(this.jobObj[i].groupId)==-1) {
+        tableContent += '<td>' + this.jobObj[i].groupDistance + '</td>';
+      }
+      else{
+        tableContent += '<td></td>';
+      }
       if(groupsPrinted.indexOf(this.jobObj[i].groupId)==-1) {
         tableContent += '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId(' + this.jobObj[i].groupId + '))"))"></input></td>';
       }
