@@ -75,6 +75,9 @@ class IndexController {
   }
 
   printTable() {
+    let jobsPerGroup = document.getElementById('jobsPerGroup').value;
+    let groupCount = Math.ceil((Object.keys(this.jobObj).length / jobsPerGroup).toFixed(2));
+
     let groupsPrinted = [];
     let tableContent = '<table>' +
       '<tr>' +
@@ -87,27 +90,35 @@ class IndexController {
       '<td>GDistance</td>' +
       '</tr>\n';
 
-    for(var i=1; i<=Object.keys(this.jobObj).length;i++) {
-      tableContent += '<tr>' +
-          '<td>' + i + '</td>' +
-          '<td>' + this.jobObj[i].groupId + '</td>' +
-          '<td>' + this.jobObj[i].name + '</td>' +
-          '<td>' + this.jobObj[i].items + '</td>' +
-          '<td>' + this.jobObj[i].alley + '</td>' +
-          '<td>' + this.jobObj[i].jobDistance + '</td>';
-      if(groupsPrinted.indexOf(this.jobObj[i].groupId)==-1) {
-        tableContent += '<td>' + this.jobObj[i].groupDistance + '</td>';
-      }
-      else{
-        tableContent += '<td></td>';
-      }
-      if(groupsPrinted.indexOf(this.jobObj[i].groupId)==-1) {
-        tableContent += '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId(' + this.jobObj[i].groupId + '))"))"></input></td>';
-      }
-      tableContent += '</tr>';
-      groupsPrinted.push(this.jobObj[i].groupId);
-    }
+    for(let j=1; j<=groupCount;j++) {
+      let jobsWithGroupId = this.getJobsWithGroupId(j);
 
+      for (let i = 1; i <= Object.keys(this.jobObj).length; i++) {
+        if(typeof jobsWithGroupId[i]!='undefined') {
+
+          let jobWithGroupId = jobsWithGroupId[i];
+
+          tableContent += '<tr>' +
+            '<td>' + i + '</td>' +
+            '<td>' + jobWithGroupId.groupId + '</td>' +
+            '<td>' + jobWithGroupId.name + '</td>' +
+            '<td>' + jobWithGroupId.items + '</td>' +
+            '<td>' + jobWithGroupId.alley + '</td>' +
+            '<td>' + jobWithGroupId.jobDistance + '</td>';
+          if (groupsPrinted.indexOf(jobWithGroupId.groupId) == -1) {
+            tableContent += '<td>' + jobWithGroupId.groupDistance + '</td>';
+          }
+          else {
+            tableContent += '<td></td>';
+          }
+          if (groupsPrinted.indexOf(jobWithGroupId.groupId) == -1) {
+            tableContent += '<td><input type="Button" value="start" onclick="new animations(indexController.getJobsWithGroupId(' + jobsWithGroupId[i].groupId + '))"))"></input></td>';
+          }
+          tableContent += '</tr>';
+          groupsPrinted.push(jobsWithGroupId[i].groupId);
+        }
+      }
+    }
     tableContent += '<tr>' +
       '<td></td><td></td><td></td><td></td><td></td><td>'+this.sumJobDistance()+'</td><td>'+this.sumGroupDistance()+'</td>' +
       '</tr>' +
